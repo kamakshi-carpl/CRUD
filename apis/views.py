@@ -21,7 +21,8 @@ def users(request):
 
     elif request.method == 'POST':
         serializer = UserSerializer(data=request.POST)
-        if serializer.is_valid():
+        print(serializer)
+        if serializer.is_valid() and request.POST['username'] and request.POST['password']:
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -61,8 +62,20 @@ def modify_image(request, id):
         return JsonResponse(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
  
     elif request.method == 'DELETE': 
+        if image_object.image:
+            image_object.image.delete()
         image_object.delete() 
         return JsonResponse({'message': 'Image was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-    
 
-            
+@api_view(['POST'])
+def sign_up():
+    serializer = UserSerializer(data=request.POST)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def test():
+    return Response({'abc': 9}, status=status.HTTP_400_BAD_REQUEST)
