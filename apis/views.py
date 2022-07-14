@@ -40,7 +40,8 @@ def user_images(request):
 def upload_image(request):
     permission_classes = (IsAuthenticated,)
     user = request.user.id
-    print(request.FILES)
+    print("request",request.FILES)
+    print('user', request.user)
     serializer = ImageSerializer(data = {'name' : request.POST['name'], 'image' : request.FILES['image'], 'user_id' : user})
     if serializer.is_valid():
         serializer.save()
